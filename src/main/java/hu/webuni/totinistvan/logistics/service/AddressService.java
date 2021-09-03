@@ -38,6 +38,8 @@ public class AddressService {
     }
 
     public void deleteById(long id) {
-        addressRepository.deleteById(id);
+        if (addressRepository.existsById(id)) {
+            addressRepository.deleteById(id);
+        }
     }
 }

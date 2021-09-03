@@ -46,22 +46,21 @@ public class AddressController {
 
     @PutMapping("/{id}")
     public ResponseEntity<AddressDto> updateAddress(@PathVariable long id, @RequestBody @Valid AddressDto addressDto) {
-        Address address = addressMapper.dtoToAddress(addressDto);
-        address.setId(id);
-        try {
-            AddressDto savedAddress = addressMapper.addressToDto(addressService.update(address));
-            return ResponseEntity.ok(savedAddress);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if (addressDto.getId() == null || addressDto.getId() == id) {
+            Address address = addressMapper.dtoToAddress(addressDto);
+            address.setId(id);
+            try {
+                AddressDto savedAddress = addressMapper.addressToDto(addressService.update(address));
+                return ResponseEntity.ok(savedAddress);
+            } catch (NoSuchElementException e) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
         }
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable long id) {
-        try {
-            addressService.deleteById(id);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        addressService.deleteById(id);
     }
 }
