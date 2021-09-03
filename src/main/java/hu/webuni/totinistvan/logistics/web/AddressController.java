@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -36,12 +37,15 @@ public class AddressController {
     }
 
     @PostMapping
-    public AddressDto addNew(@RequestBody AddressDto addressDto) {
-        return addressMapper.addressToDto(addressService.save(addressMapper.dtoToAddress(addressDto)));
+    public AddressDto addNew(@RequestBody @Valid AddressDto addressDto) {
+        if (addressDto.getId() == null) {
+            return addressMapper.addressToDto(addressService.save(addressMapper.dtoToAddress(addressDto)));
+        }
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AddressDto> updateAddress(@PathVariable long id, @RequestBody AddressDto addressDto) {
+    public ResponseEntity<AddressDto> updateAddress(@PathVariable long id, @RequestBody @Valid AddressDto addressDto) {
         Address address = addressMapper.dtoToAddress(addressDto);
         address.setId(id);
         try {

@@ -1,12 +1,22 @@
 package hu.webuni.totinistvan.logistics.model.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 public class AddressDto {
 
-    private long id;
+    private Long id;
+
+    @NotBlank
+    @Size(min = 2, max = 2)
     private String countryCode;
-    private String city;
-    private String street;
+    @NotBlank
     private String zipCode;
+    @NotBlank
+    private String city;
+    @NotBlank
+    private String street;
+    @NotBlank
     private String houseNumber;
     private double latitude;
     private double longitude;
@@ -14,11 +24,11 @@ public class AddressDto {
     public AddressDto() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
