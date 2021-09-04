@@ -6,6 +6,12 @@ import hu.webuni.totinistvan.logistics.model.dto.AddressFilterDto;
 import hu.webuni.totinistvan.logistics.model.entity.Address;
 import hu.webuni.totinistvan.logistics.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -66,8 +72,15 @@ public class AddressController {
     }
 
     @PostMapping("/search")
-    public List<AddressDto> getByExample(@RequestBody AddressFilterDto example) {
-        List<Address> filteredList = addressService.findAddressesByExample(example);
-        return addressMapper.addressesToDtos(filteredList);
+    public ResponseEntity<List<AddressDto>> getByExample(@RequestBody AddressFilterDto example,
+                                         @PageableDefault(size = 100)
+                                         @SortDefault.SortDefaults({
+                                                 @SortDefault(sort = "id"),
+                                                 @SortDefault(direction = Sort.Direction.ASC)
+                                         }) Pageable pageable) {
+        Page<Address> page = addressService.findAddressesByExample(example, pageable);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("X-Total-Count", String.valueOf(page.getTotalElements()));
+        return new ResponseEntity<>(addressMapper.addressesToDtos(page.getContent()), httpHeaders, HttpStatus.OK);
     }
 }

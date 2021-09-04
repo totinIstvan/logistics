@@ -4,7 +4,8 @@ import hu.webuni.totinistvan.logistics.model.dto.AddressFilterDto;
 import hu.webuni.totinistvan.logistics.model.entity.Address;
 import hu.webuni.totinistvan.logistics.repository.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +49,7 @@ public class AddressService {
         }
     }
 
-    public List<Address> findAddressesByExample(AddressFilterDto example) {
+    public Page<Address> findAddressesByExample(AddressFilterDto example, Pageable pageable) {
         String countryCode = example.getCountryCode();
         String zipCode = example.getZipCode();
         String city = example.getCity();
@@ -72,6 +73,6 @@ public class AddressService {
             spec = spec.and(AddressSpecifications.hasStreet(street));
         }
 
-        return addressRepository.findAll(spec, Sort.by("city"));
+        return addressRepository.findAll(spec, pageable);
     }
 }
