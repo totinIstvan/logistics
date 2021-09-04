@@ -2,6 +2,7 @@ package hu.webuni.totinistvan.logistics.web;
 
 import hu.webuni.totinistvan.logistics.mapper.AddressMapper;
 import hu.webuni.totinistvan.logistics.model.dto.AddressDto;
+import hu.webuni.totinistvan.logistics.model.dto.AddressFilterDto;
 import hu.webuni.totinistvan.logistics.model.entity.Address;
 import hu.webuni.totinistvan.logistics.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,5 +63,11 @@ public class AddressController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable long id) {
         addressService.deleteById(id);
+    }
+
+    @PostMapping("/search")
+    public List<AddressDto> getByExample(@RequestBody AddressFilterDto example) {
+        List<Address> filteredList = addressService.findAddressesByExample(example);
+        return addressMapper.addressesToDtos(filteredList);
     }
 }
