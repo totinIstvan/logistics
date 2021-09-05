@@ -5,7 +5,7 @@ import hu.webuni.totinistvan.logistics.model.dto.AddressDto;
 import hu.webuni.totinistvan.logistics.model.dto.AddressFilterDto;
 import hu.webuni.totinistvan.logistics.model.entity.Address;
 import hu.webuni.totinistvan.logistics.service.AddressService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -70,16 +70,21 @@ public class AddressController {
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable long id) {
-        addressService.deleteById(id);
+        try {
+            addressService.deleteById(id);
+        } catch (DataIntegrityViolationException exception) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Address with id " + id +
+                    " cannot be deleted from the database because it still associated with an existing transport plan");
+        }
     }
 
     @PostMapping("/search")
     public ResponseEntity<List<AddressDto>> getByExample(@RequestBody AddressFilterDto example,
-                                         @PageableDefault(size = 100)
-                                         @SortDefault.SortDefaults({
-                                                 @SortDefault(sort = "id"),
-                                                 @SortDefault(direction = Sort.Direction.ASC)
-                                         }) Pageable pageable) {
+                                                         @PageableDefault(size = 100)
+                                                         @SortDefault.SortDefaults({
+                                                                 @SortDefault(sort = "id"),
+                                                                 @SortDefault(direction = Sort.Direction.ASC)
+                                                         }) Pageable pageable) {
         Page<Address> page = addressService.findAddressesByExample(example, pageable);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Total-Count", String.valueOf(page.getTotalElements()));
