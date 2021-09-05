@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class Section {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
@@ -53,5 +53,13 @@ public class Section {
 
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    public TransportPlan getTransportPlan() {
+        return transportPlan;
+    }
+
+    public void setTransportPlan(TransportPlan transportPlan) {
+        this.transportPlan = transportPlan;
     }
 }

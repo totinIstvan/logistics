@@ -25,11 +25,13 @@ import java.util.NoSuchElementException;
 @RequestMapping("/api/addresses")
 public class AddressController {
 
-    @Autowired
-    private AddressService addressService;
+    private final AddressService addressService;
+    private final AddressMapper addressMapper;
 
-    @Autowired
-    private AddressMapper addressMapper;
+    public AddressController(AddressService addressService, AddressMapper addressMapper) {
+        this.addressService = addressService;
+        this.addressMapper = addressMapper;
+    }
 
     @GetMapping
     public List<AddressDto> getAll() {
