@@ -73,9 +73,9 @@ public class TransportPlanController {
     }
 
     @PostMapping( "/{id}/delay")
-    public void addDelayToMilestones(@PathVariable long id, @RequestBody DelayDto delayDto) {
+    public void addDelayToMilestone(@PathVariable long id, @RequestBody DelayDto delayDto) {
         try {
-            transportPlanService.addDelayToMilestones(id, delayDto.getMilestoneId(), delayDto.getMinutesOfDelay());
+            transportPlanService.addDelayToMilestone(id, delayDto.getMilestoneId(), delayDto.getMinutesOfDelay());
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Transport plan or milestone not found");
         } catch (InvalidParameterException e) {

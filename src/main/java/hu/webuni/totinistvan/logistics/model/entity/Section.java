@@ -23,6 +23,13 @@ public class Section {
     public Section() {
     }
 
+    public Section(TransportPlan transportPlan, Milestone fromMilestone, Milestone toMilestone, int number) {
+        this.transportPlan = transportPlan;
+        this.fromMilestone = fromMilestone;
+        this.toMilestone = toMilestone;
+        this.number = number;
+    }
+
     public long getId() {
         return id;
     }

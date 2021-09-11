@@ -59,7 +59,7 @@ public class TransportPlanService {
     }
 
     @Transactional
-    public void addDelayToMilestones(long id, long milestoneId, long delayInMinutes) {
+    public void addDelayToMilestone(long id, long milestoneId, long delayInMinutes) {
         if (transportPlanRepository.existsById(id) && milestoneRepository.existsById(milestoneId)) {
             TransportPlan transportPlan = transportPlanRepository.findById(id).get();
             List<Section> sections = transportPlan.getSections();

@@ -18,6 +18,10 @@ public class TransportPlan {
     public TransportPlan() {
     }
 
+    public TransportPlan(int revenue) {
+        this.revenue = revenue;
+    }
+
     public long getId() {
         return id;
     }
