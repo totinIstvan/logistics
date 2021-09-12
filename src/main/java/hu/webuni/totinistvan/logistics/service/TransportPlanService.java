@@ -31,11 +31,11 @@ public class TransportPlanService {
     }
 
     public List<TransportPlan> findAll() {
-        return transportPlanRepository.findAll();
+        return transportPlanRepository.findAllWithSections();
     }
 
     public Optional<TransportPlan> findById(long id) {
-        return transportPlanRepository.findById(id);
+        return transportPlanRepository.findByIdWithSections(id);
     }
 
     @Transactional

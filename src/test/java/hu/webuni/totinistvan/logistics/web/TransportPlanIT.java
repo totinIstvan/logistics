@@ -296,7 +296,7 @@ public class TransportPlanIT {
     }
 
     @Test
-    void addDelayToMilestones_callWithMilestoneNotBelongedToTransportPlan_shouldReturnHttpStatusCode400BadRequest() {
+    void addDelayToMilestones_callWithMilestoneWitchNotBelongedToTransportPlan_shouldReturnHttpStatusCode400BadRequest() {
         Address address = new Address("CC", "Test City", "Test street", "Test ZIP", "123", 11.111111, 11.111111);
         Milestone extraMilestone = new Milestone(address, LocalDateTime.of(2021, 9, 10, 6, 0, 0));
         addressRepository.save(address);

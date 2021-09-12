@@ -3,6 +3,20 @@ package hu.webuni.totinistvan.logistics.model.entity;
 import javax.persistence.*;
 import java.util.List;
 
+@NamedEntityGraph(
+        name = "TransportPlan.full",
+        attributeNodes = @NamedAttributeNode(value = "sections", subgraph = "transportPlan.sections"),
+        subgraphs = {
+                @NamedSubgraph(name = "transportPlan.sections",
+                        attributeNodes = {
+                                @NamedAttributeNode(value = "fromMilestone", subgraph = "fromMilestone.address"),
+                                @NamedAttributeNode(value = "toMilestone", subgraph = "toMilestone.address")}),
+                @NamedSubgraph(name = "fromMilestone.address",
+                        attributeNodes = @NamedAttributeNode(value = "address")),
+                @NamedSubgraph(name = "toMilestone.address",
+                        attributeNodes = @NamedAttributeNode(value = "address"))
+        }
+)
 @Entity
 public class TransportPlan {
 
