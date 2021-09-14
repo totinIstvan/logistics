@@ -9,11 +9,9 @@ import java.util.List;
         subgraphs = {
                 @NamedSubgraph(name = "transportPlan.sections",
                         attributeNodes = {
-                                @NamedAttributeNode(value = "fromMilestone", subgraph = "fromMilestone.address"),
-                                @NamedAttributeNode(value = "toMilestone", subgraph = "toMilestone.address")}),
-                @NamedSubgraph(name = "fromMilestone.address",
-                        attributeNodes = @NamedAttributeNode(value = "address")),
-                @NamedSubgraph(name = "toMilestone.address",
+                                @NamedAttributeNode(value = "fromMilestone", subgraph = "milestone.address"),
+                                @NamedAttributeNode(value = "toMilestone", subgraph = "milestone.address")}),
+                @NamedSubgraph(name = "milestone.address",
                         attributeNodes = @NamedAttributeNode(value = "address"))
         }
 )
