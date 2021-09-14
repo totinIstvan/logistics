@@ -1,6 +1,7 @@
 package hu.webuni.totinistvan.logistics.web;
 
 import hu.webuni.totinistvan.logistics.model.dto.DelayDto;
+import hu.webuni.totinistvan.logistics.model.dto.LoginDto;
 import hu.webuni.totinistvan.logistics.model.dto.SectionDto;
 import hu.webuni.totinistvan.logistics.model.dto.TransportPlanDto;
 import hu.webuni.totinistvan.logistics.model.entity.Address;
@@ -51,6 +52,7 @@ public class TransportPlanIT {
     @Autowired
     private TransportPlanRepository transportPlanRepository;
 
+    private String jwtToken;
     private TransportPlan testTransportPlan;
     private final List<Milestone> milestones = new ArrayList<>();
 
@@ -81,6 +83,23 @@ public class TransportPlanIT {
         milestoneRepository.saveAll(milestones);
         sectionRepository.saveAll(sections);
         testTransportPlan.setSections(sections);
+        if (jwtToken == null) {
+            login();
+        }
+    }
+
+    private void login() {
+        LoginDto loginDto = new LoginDto();
+        loginDto.setUsername("TransportUser");
+        loginDto.setPassword("pass");
+
+        this.jwtToken = webTestClient.post()
+                .uri("/api/login")
+                .bodyValue(loginDto)
+                .exchange()
+                .expectBody(String.class)
+                .returnResult()
+                .getResponseBody();
     }
 
     @Test
@@ -296,7 +315,7 @@ public class TransportPlanIT {
     }
 
     @Test
-    void addDelayToMilestones_callWithMilestoneWitchNotBelongedToTransportPlan_shouldReturnHttpStatusCode400BadRequest() {
+    void addDelayToMilestones_callWithMilestoneWitchNotBelongsToTransportPlan_shouldReturnHttpStatusCode400BadRequest() {
         Address address = new Address("CC", "Test City", "Test street", "Test ZIP", "123", 11.111111, 11.111111);
         Milestone extraMilestone = new Milestone(address, LocalDateTime.of(2021, 9, 10, 6, 0, 0));
         addressRepository.save(address);
@@ -318,6 +337,7 @@ public class TransportPlanIT {
     private ResponseSpec registerDelayToMilestone(DelayDto delay, long id) {
         return webTestClient.post()
                 .uri(BASE_URI + "/" + id + "/delay")
+                .headers(headers -> headers.setBearerAuth(jwtToken))
                 .bodyValue(delay)
                 .exchange();
     }
