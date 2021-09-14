@@ -9,7 +9,7 @@ import java.util.TreeMap;
 @Service
 public class RevenueService {
 
-    RevenueConfigProperties revenueConfigProperties;
+    private final RevenueConfigProperties revenueConfigProperties;
 
     public RevenueService(RevenueConfigProperties revenueConfigProperties) {
         this.revenueConfigProperties = revenueConfigProperties;
